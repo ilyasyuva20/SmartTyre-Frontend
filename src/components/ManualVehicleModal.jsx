@@ -3,8 +3,48 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Car, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { vehicleApi } from '../services/api';
 
+const DEFAULT_CATALOG = {
+  'Maruti Suzuki': {
+    'Swift': ['VXi / ZXi (2018-2024)', 'LXi (2017-2024)', 'ZXi Plus Dual Tone'],
+    'Baleno': ['Zeta / Alpha (2019-2024)', 'Delta / Sigma (2019-2024)'],
+    'Brezza': ['ZXi Plus (2020-2024)', 'VXi / LXi (2020-2024)'],
+    'Ertiga': ['ZXi / ZXi Plus (2019-2024)', 'VXi / LXi (2019-2024)']
+  },
+  'Hyundai': {
+    'Creta': ['SX / SX(O) (2020-2024)', 'E / EX / S (2020-2024)', 'Knight Edition'],
+    'i20': ['Asta / Asta(O) (2020-2024)', 'Magna / Sportz (2020-2024)'],
+    'Verna': ['SX(O) 1.5 TSI (2020-2024)', 'S / SX 1.5 (2020-2024)'],
+    'Venue': ['SX / SX(O) (2019-2024)', 'E / S (2019-2024)']
+  },
+  'Honda': {
+    'City': ['VX / ZX (5th Gen)', 'V / VX (4th Gen)', 'e:HEV Hybrid'],
+    'Amaze': ['VX / VX CVT (2018-2024)', 'S / E (2018-2024)']
+  },
+  'Tata': {
+    'Nexon': ['XZ+ / Fearless (2020-2024)', 'XM / XZ (2020-2024)'],
+    'Harrier': ['XZA+ / Dark Edition (2020-2024)', 'XE / XM (2020-2024)'],
+    'Punch': ['Creative / Accomplished (2021-2024)', 'Pure / Adventure (2021-2024)']
+  },
+  'Mahindra': {
+    'Thar': ['LX Hardtop / Soft top (2020-2024)', 'AX Opt (2020-2024)'],
+    'Scorpio-N': ['Z8L / Z8 (2022-2024)', 'Z2 / Z4 (2022-2024)'],
+    'XUV700': ['AX7 / AX7L (2021-2024)', 'AX3 / AX5 (2021-2024)']
+  },
+  'Toyota': {
+    'Fortuner': ['4x4 Legender (2018-2024)', '2.8 4x2 / 4x4 (2018-2024)'],
+    'Innova Crysta': ['VX / ZX (2016-2024)', 'GX (2016-2024)']
+  },
+  'Kia': {
+    'Seltos': ['GTX+ / X-Line (2020-2024)', 'HTK / HTX (2020-2024)'],
+    'Sonet': ['HTX / GTX (2020-2024)', 'HTE / HTK (2020-2024)']
+  },
+  'Volkswagen': {
+    'Virtus': ['GT 1.5 TSI (2022-2024)', 'Highline / Topline 1.0 TSI']
+  }
+};
+
 const ManualVehicleModal = ({ isOpen, onClose, onSelectVehicle }) => {
-  const [catalog, setCatalog] = useState({});
+  const [catalog, setCatalog] = useState(DEFAULT_CATALOG);
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
   const [selectedVariant, setSelectedVariant] = useState('');
@@ -12,15 +52,13 @@ const ManualVehicleModal = ({ isOpen, onClose, onSelectVehicle }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setLoading(true);
       vehicleApi.getMakesModels()
         .then(res => {
-          if (res.success && res.data) {
+          if (res.success && res.data && Object.keys(res.data).length > 0) {
             setCatalog(res.data);
           }
         })
-        .catch(err => console.error('Failed to load vehicle catalog:', err))
-        .finally(() => setLoading(false));
+        .catch(err => console.error('Using default vehicle catalog:', err));
     }
   }, [isOpen]);
 
