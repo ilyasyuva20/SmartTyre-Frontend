@@ -61,7 +61,7 @@ const RecommendationsView = () => {
 
   // Generate WhatsApp wa.me URL
   const generateWhatsAppUrl = (grandTotal) => {
-    const shopPhoneNumber = "919876543210"; // Placeholder shop WhatsApp number
+    const shopPhoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "918089579575";
     
     const vehicleInfo = vehicleData
       ? `${vehicleData.make} ${vehicleData.model} (${vehicleData.variant || ''})`
